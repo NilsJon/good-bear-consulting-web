@@ -1,5 +1,6 @@
 "use client"
 import Link from "next/link"
+import Image from "next/image"
 
 export default function Home() {
   return (
@@ -24,16 +25,27 @@ export default function Home() {
         </div>
       </nav>
 
-      {/* Hero Section */}
+            {/* Hero Section */}
       <section className="max-w-7xl mx-auto px-6 lg:px-12 pt-32 pb-24">
-        <div className="max-w-4xl">
-          <h1 className="text-5xl lg:text-7xl font-light tracking-tight text-foreground leading-tight text-balance mb-8">
-            Operating at the Edge of Technology and Strategy
-          </h1>
-          <p className="text-xl lg:text-2xl text-muted-foreground font-light leading-relaxed text-pretty max-w-3xl">
-            We partner with forward-thinking organizations to navigate complexity, unlock optionality, and deliver
-            sustainable technical leverage.
-          </p>
+        <div className="grid lg:grid-cols-2 gap-16 items-center">
+          <div className="max-w-4xl">
+            <h1 className="text-5xl lg:text-7xl font-light tracking-tight text-foreground leading-tight text-balance mb-8">
+              Operating at the Edge of Technology and Strategy
+            </h1>
+            <p className="text-xl lg:text-2xl text-muted-foreground font-light leading-relaxed text-pretty max-w-3xl">
+              We partner with forward-thinking organizations to navigate complexity, unlock optionality, and deliver
+              sustainable technical leverage.
+            </p>
+          </div>
+          <div className="relative h-[400px] lg:h-[500px] rounded-sm overflow-hidden">
+            <Image
+              src="/bear.png"
+              alt="Nordic forest landscape representing strategic patience and observation"
+              fill
+              className="object-cover"
+              priority
+            />
+          </div>
         </div>
       </section>
 

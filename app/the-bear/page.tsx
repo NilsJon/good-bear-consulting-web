@@ -1,12 +1,13 @@
 "use client"
 
 import Link from "next/link"
+import Image from "next/image"
 
 export default function TheBear() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-[var(--bear-bg)]">
       {/* Navigation */}
-      <nav className="border-b border-border">
+      <nav className="border-b border-border bg-background/80 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-6 lg:px-12 py-6 flex items-center justify-between">
           <Link href="/" className="text-xl tracking-tight font-medium">
             Good Bear Consulting
@@ -15,7 +16,7 @@ export default function TheBear() {
             <Link href="/the-bear" className="text-sm text-foreground font-medium">
               The Bear
             </Link>
-            <Link
+            <Link 
               href="/contact"
               className="text-sm px-5 py-2 bg-primary text-primary-foreground hover:bg-primary/90 transition-colors rounded-sm"
             >
@@ -26,16 +27,31 @@ export default function TheBear() {
       </nav>
 
       {/* Hero */}
-      <section className="max-w-5xl mx-auto px-6 lg:px-12 pt-32 pb-24">
-        <h1 className="text-5xl lg:text-7xl font-light tracking-tight text-foreground leading-tight text-balance">
-          The Bear Philosophy
-        </h1>
+      <section className="relative h-[70vh] min-h-[500px] overflow-hidden">
+        <Image
+          src="/majestic-bear-walking-through-snowy-nordic-forest-.jpg"
+          alt="Bear walking through Nordic winter forest"
+          fill
+          className="object-cover"
+          priority
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-[var(--bear-bg)]" />
+        <div className="relative h-full max-w-5xl mx-auto px-6 lg:px-12 flex items-end pb-16">
+          <div className="space-y-6">
+            <h1 className="text-5xl lg:text-7xl font-light tracking-tight text-white leading-tight text-balance">
+              The Bear Philosophy
+            </h1>
+            <p className="text-xl lg:text-2xl text-white/90 font-light leading-relaxed max-w-3xl text-pretty">
+              Moving with purpose, not haste. Observing the system before acting.
+            </p>
+          </div>
+        </div>
       </section>
 
       {/* Philosophy Content */}
-      <section className="max-w-5xl mx-auto px-6 lg:px-12 space-y-24 pb-32">
+      <section className="max-w-5xl mx-auto px-6 lg:px-12 space-y-16 py-24">
         {/* Introduction */}
-        <div className="space-y-8">
+        <div className="bg-background/40 border border-border/30 p-12 rounded-sm space-y-6">
           <p className="text-xl lg:text-2xl text-foreground font-light leading-relaxed text-pretty">
             The bear moves through the forest with purpose, not haste. It observes the system before acting. It operates
             independently, but never without intent.
@@ -46,78 +62,70 @@ export default function TheBear() {
           </p>
         </div>
 
-        {/* Principles */}
-        <div className="space-y-16 border-t border-border pt-16">
-          <div className="grid md:grid-cols-3 gap-12">
-            <div className="md:col-span-1">
-              <div className="inline-block px-3 py-1 bg-accent/10 rounded-sm mb-3">
-                <span className="text-xs font-medium text-accent uppercase tracking-wider">Principle</span>
+        {/* Core Principles Grid */}
+        <div className="space-y-6">
+          <h2 className="text-3xl lg:text-4xl font-light tracking-tight text-foreground">Core Principles</h2>
+
+          <div className="grid md:grid-cols-2 gap-6">
+            {/* Patience */}
+            <div className="bg-background/40 border border-border/30 p-8 rounded-sm space-y-4 hover:border-border/50 transition-colors">
+              <div className="inline-block px-3 py-1 bg-primary/5 rounded-sm">
+                <span className="text-xs font-medium text-primary uppercase tracking-wider">Principle</span>
               </div>
-              <h2 className="text-2xl font-light tracking-tight mb-2">Patience</h2>
-            </div>
-            <div className="md:col-span-2 space-y-4">
-              <p className="text-lg text-muted-foreground leading-relaxed">
+              <h3 className="text-2xl font-light tracking-tight text-foreground">Patience</h3>
+              <p className="text-base text-muted-foreground leading-relaxed">
                 The bear does not rush delivery. It waits for winter with preparation, not anxiety. It understands that
                 timing is as critical as execution.
               </p>
-              <p className="text-lg text-muted-foreground leading-relaxed">
+              <p className="text-base text-muted-foreground leading-relaxed">
                 In our practice, we resist the pressure to move before understanding is complete. Strategic patience
                 yields better outcomes than reactive speed.
               </p>
             </div>
-          </div>
 
-          <div className="grid md:grid-cols-3 gap-12 border-t border-border pt-16">
-            <div className="md:col-span-1">
-              <div className="inline-block px-3 py-1 bg-accent/10 rounded-sm mb-3">
-                <span className="text-xs font-medium text-accent uppercase tracking-wider">Principle</span>
+            {/* Observation */}
+            <div className="bg-background/40 border border-border/30 p-8 rounded-sm space-y-4 hover:border-border/50 transition-colors">
+              <div className="inline-block px-3 py-1 bg-primary/5 rounded-sm">
+                <span className="text-xs font-medium text-primary uppercase tracking-wider">Principle</span>
               </div>
-              <h2 className="text-2xl font-light tracking-tight mb-2">Observation</h2>
-            </div>
-            <div className="md:col-span-2 space-y-4">
-              <p className="text-lg text-muted-foreground leading-relaxed">
+              <h3 className="text-2xl font-light tracking-tight text-foreground">Observation</h3>
+              <p className="text-base text-muted-foreground leading-relaxed">
                 The bear observes the system before acting. It reads patterns in the forest—the movement of seasons, the
                 behavior of other creatures, the availability of resources.
               </p>
-              <p className="text-lg text-muted-foreground leading-relaxed">
+              <p className="text-base text-muted-foreground leading-relaxed">
                 We believe that deep observation precedes effective intervention. Before we design solutions, we study
                 the organizational ecosystem in its full complexity.
               </p>
             </div>
-          </div>
 
-          <div className="grid md:grid-cols-3 gap-12 border-t border-border pt-16">
-            <div className="md:col-span-1">
-              <div className="inline-block px-3 py-1 bg-accent/10 rounded-sm mb-3">
-                <span className="text-xs font-medium text-accent uppercase tracking-wider">Principle</span>
+            {/* Independence */}
+            <div className="bg-background/40 border border-border/30 p-8 rounded-sm space-y-4 hover:border-border/50 transition-colors">
+              <div className="inline-block px-3 py-1 bg-primary/5 rounded-sm">
+                <span className="text-xs font-medium text-primary uppercase tracking-wider">Principle</span>
               </div>
-              <h2 className="text-2xl font-light tracking-tight mb-2">Independence</h2>
-            </div>
-            <div className="md:col-span-2 space-y-4">
-              <p className="text-lg text-muted-foreground leading-relaxed">
+              <h3 className="text-2xl font-light tracking-tight text-foreground">Independence</h3>
+              <p className="text-base text-muted-foreground leading-relaxed">
                 The bear operates independently, but never without intent. It makes decisions based on direct experience
                 and careful assessment, not external pressure or fleeting trends.
               </p>
-              <p className="text-lg text-muted-foreground leading-relaxed">
+              <p className="text-base text-muted-foreground leading-relaxed">
                 Our recommendations emerge from first principles and contextual analysis. We are unswayed by industry
                 hype or conventional wisdom that doesn't serve your specific circumstances.
               </p>
             </div>
-          </div>
 
-          <div className="grid md:grid-cols-3 gap-12 border-t border-border pt-16">
-            <div className="md:col-span-1">
-              <div className="inline-block px-3 py-1 bg-accent/10 rounded-sm mb-3">
-                <span className="text-xs font-medium text-accent uppercase tracking-wider">Principle</span>
+            {/* Resilience */}
+            <div className="bg-background/40 border border-border/30 p-8 rounded-sm space-y-4 hover:border-border/50 transition-colors">
+              <div className="inline-block px-3 py-1 bg-primary/5 rounded-sm">
+                <span className="text-xs font-medium text-primary uppercase tracking-wider">Principle</span>
               </div>
-              <h2 className="text-2xl font-light tracking-tight mb-2">Resilience</h2>
-            </div>
-            <div className="md:col-span-2 space-y-4">
-              <p className="text-lg text-muted-foreground leading-relaxed">
+              <h3 className="text-2xl font-light tracking-tight text-foreground">Resilience</h3>
+              <p className="text-base text-muted-foreground leading-relaxed">
                 The bear endures long winters through preparation and adaptation. It builds reserves when resources are
                 abundant and draws on them when conditions become harsh.
               </p>
-              <p className="text-lg text-muted-foreground leading-relaxed">
+              <p className="text-base text-muted-foreground leading-relaxed">
                 We design systems and capabilities that withstand uncertainty. Our work creates organizational
                 resilience—the capacity to adapt, recover, and thrive across changing conditions.
               </p>
@@ -125,8 +133,8 @@ export default function TheBear() {
           </div>
         </div>
 
-        {/* Closing */}
-        <div className="space-y-8 border-t border-border pt-16">
+        {/* Closing Statement */}
+        <div className="bg-background/40 border border-border/30 border-l-2 border-l-primary/40 p-12 rounded-sm space-y-6">
           <p className="text-xl lg:text-2xl text-foreground font-light leading-relaxed text-pretty">
             The forest teaches: clarity emerges from silence, strength from restraint, progress from patience.
           </p>
@@ -136,20 +144,6 @@ export default function TheBear() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="max-w-7xl mx-auto px-6 lg:px-12 py-12 mt-24 border-t border-border">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-          <p className="text-sm text-muted-foreground">© {new Date().getFullYear()} Good Bear Consulting</p>
-          <div className="flex gap-8">
-            <Link href="/the-bear" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-              The Bear
-            </Link>
-            <Link href="/contact" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-              Contact
-            </Link>
-          </div>
-        </div>
-      </footer>
     </div>
   )
 }

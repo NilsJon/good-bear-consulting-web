@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import Image from "next/image"
 
 export default function Contact() {
   return (
@@ -32,13 +33,51 @@ export default function Contact() {
             sustainable transformation requires both depth and patience.
           </p>
 
+          <div className="border border-border bg-card rounded-sm p-8 mt-16">
+            <div className="flex flex-col md:flex-row gap-8 items-start">
+              <div className="flex-shrink-0">
+                <div className="relative w-32 h-32 rounded-sm overflow-hidden bg-muted">
+                  <Image
+                    src="/ceo.png"
+                    alt="Nils Stridbeck, CEO"
+                    width={128}
+                    height={128}
+                    className="object-cover"
+                  />
+                </div>
+              </div>
+              <div className="flex-1 space-y-6">
+                <div>
+                  <h2 className="text-2xl font-light tracking-tight text-foreground mb-2">Nils Stridbeck</h2>
+                  <p className="text-sm uppercase tracking-wider text-accent mb-4">Chief Executive Officer</p>
+                  <p className="text-muted-foreground leading-relaxed">
+                    A visionary leader with almost one decade navigating the intersection of technology and organizational
+                    transformation. Nils brings a uniquely Nordic approach to strategic consulting—one rooted in
+                    patience, systems thinking, and sustainable value creation.
+                  </p>
+                </div>
+                <div className="space-y-3 pt-4 border-t border-border">
+                  <div className="flex items-start gap-3">
+                    <span className="text-sm text-muted-foreground min-w-[60px]">Email</span>
+                    <a
+                      href="mailto:nils@goodbear.consulting"
+                      className="text-sm text-foreground hover:text-primary transition-colors"
+                    >
+                      nils@goodbearconsulting.se
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div className="space-y-6 border-t border-border pt-12">
-            <p className="text-sm uppercase tracking-wider text-muted-foreground">Email</p>
+            <p className="text-sm uppercase tracking-wider text-muted-foreground">General Inquiries</p>
             <a
               href="mailto:hello@goodbear.consulting"
               className="text-2xl font-light text-foreground hover:text-primary transition-colors inline-block"
             >
-              hello@goodbear.consulting
+              nils@goodbearconsulting.se
             </a>
           </div>
 

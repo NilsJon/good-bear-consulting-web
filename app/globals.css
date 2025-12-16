@@ -46,6 +46,9 @@
   --sidebar-accent-foreground: oklch(0.22 0.01 60);
   --sidebar-border: oklch(0.86 0.012 70);
   --sidebar-ring: oklch(0.35 0.08 155);
+  /* Added Nordic winter blue background for The Bear page */
+  --bear-bg: oklch(0.92 0.02 230);
+  --bear-card-bg: oklch(0.95 0.015 230);
 }
 
 .dark {
@@ -84,6 +87,8 @@
   --sidebar-accent-foreground: oklch(0.94 0.008 75);
   --sidebar-border: oklch(0.26 0.012 60);
   --sidebar-ring: oklch(0.5 0.1 155);
+  --bear-bg: oklch(0.2 0.02 230);
+  --bear-card-bg: oklch(0.24 0.015 230);
 }
 
 @theme inline {
@@ -125,6 +130,8 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+  --color-bear-bg: var(--bear-bg);
+  --color-bear-card-bg: var(--bear-card-bg);
 }
 
 @layer base {
