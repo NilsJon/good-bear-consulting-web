@@ -36,12 +36,12 @@ export default function Contact() {
           <div className="border border-border bg-card rounded-sm p-8 mt-16">
             <div className="flex flex-col md:flex-row gap-8 items-start">
               <div className="flex-shrink-0">
-                <div className="relative w-32 h-32 rounded-sm overflow-hidden bg-muted">
+                <div className="relative w-32 h-42 rounded-sm overflow-hidden bg-muted">
                   <Image
-                    src="/ceo.png"
+                    src="/ceo.JPG"
                     alt="Nils Stridbeck, CEO"
                     width={128}
-                    height={128}
+                    height={180}
                     className="object-cover"
                   />
                 </div>
@@ -52,7 +52,7 @@ export default function Contact() {
                   <p className="text-sm uppercase tracking-wider text-accent mb-4">Chief Executive Officer</p>
                   <p className="text-muted-foreground leading-relaxed">
                     A visionary leader with almost one decade navigating the intersection of technology and organizational
-                    transformation. Nils brings a uniquely Nordic approach to strategic consulting—one rooted in
+                    transformation. Nils brings a unique approach to strategic consulting—one rooted in
                     patience, systems thinking, and sustainable value creation.
                   </p>
                 </div>
