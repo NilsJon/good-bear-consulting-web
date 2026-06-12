@@ -4,96 +4,50 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* Updated to Nordic-inspired palette with warm sand, forest green, copper/amber, and charcoal */
-  /* Warm sand/oatmeal background */
-  --background: oklch(0.96 0.01 75);
-  /* Deep charcoal text */
-  --foreground: oklch(0.22 0.01 60);
-  /* Slightly lighter sand for cards */
-  --card: oklch(0.97 0.008 75);
-  --card-foreground: oklch(0.22 0.01 60);
-  --popover: oklch(0.97 0.008 75);
-  --popover-foreground: oklch(0.22 0.01 60);
-  /* Deep forest green primary */
-  --primary: oklch(0.35 0.08 155);
-  --primary-foreground: oklch(0.98 0.005 75);
-  /* Light sand secondary */
-  --secondary: oklch(0.88 0.015 70);
-  --secondary-foreground: oklch(0.22 0.01 60);
-  /* Muted warm tones */
-  --muted: oklch(0.9 0.012 72);
-  --muted-foreground: oklch(0.48 0.02 60);
-  /* Copper/amber accent (used sparingly) */
-  --accent: oklch(0.58 0.12 55);
-  --accent-foreground: oklch(0.98 0.005 75);
-  --destructive: oklch(0.5 0.18 25);
-  --destructive-foreground: oklch(0.98 0.005 75);
-  /* Subtle warm borders */
-  --border: oklch(0.86 0.012 70);
-  --input: oklch(0.86 0.012 70);
-  --ring: oklch(0.35 0.08 155);
-  --chart-1: oklch(0.35 0.08 155);
-  --chart-2: oklch(0.58 0.12 55);
-  --chart-3: oklch(0.48 0.06 45);
-  --chart-4: oklch(0.42 0.08 160);
-  --chart-5: oklch(0.55 0.1 50);
-  --radius: 0.125rem;
-  --sidebar: oklch(0.96 0.01 75);
-  --sidebar-foreground: oklch(0.22 0.01 60);
-  --sidebar-primary: oklch(0.35 0.08 155);
-  --sidebar-primary-foreground: oklch(0.98 0.005 75);
-  --sidebar-accent: oklch(0.88 0.015 70);
-  --sidebar-accent-foreground: oklch(0.22 0.01 60);
-  --sidebar-border: oklch(0.86 0.012 70);
-  --sidebar-ring: oklch(0.35 0.08 155);
-  /* Added Nordic winter blue background for The Bear page */
-  --bear-bg: oklch(0.92 0.02 230);
-  --bear-card-bg: oklch(0.95 0.015 230);
-}
+  --background: #0A0D12;
+  --foreground: #E0E6ED;
+  --card: #111318;
+  --card-foreground: #E0E6ED;
+  --popover: #111318;
+  --popover-foreground: #E0E6ED;
+  --primary: #3B82F6;
+  --primary-foreground: #FFFFFF;
+  --secondary: #161A22;
+  --secondary-foreground: #E0E6ED;
+  --muted: #1A1F28;
+  --muted-foreground: #8B95A5;
+  --accent: #8B5CF6;
+  --accent-foreground: #FFFFFF;
+  --destructive: #EF4444;
+  --destructive-foreground: #FFFFFF;
+  --border: #1E2330;
+  --input: #1E2330;
+  --ring: #3B82F6;
 
-.dark {
-  /* Dark mode with deep charcoal backgrounds and warm accents */
-  --background: oklch(0.18 0.01 60);
-  --foreground: oklch(0.94 0.008 75);
-  --card: oklch(0.2 0.01 60);
-  --card-foreground: oklch(0.94 0.008 75);
-  --popover: oklch(0.2 0.01 60);
-  --popover-foreground: oklch(0.94 0.008 75);
-  /* Muted forest green for dark mode */
-  --primary: oklch(0.55 0.1 155);
-  --primary-foreground: oklch(0.18 0.01 60);
-  --secondary: oklch(0.28 0.015 58);
-  --secondary-foreground: oklch(0.94 0.008 75);
-  --muted: oklch(0.26 0.012 60);
-  --muted-foreground: oklch(0.62 0.015 68);
-  /* Copper accent for dark mode */
-  --accent: oklch(0.62 0.12 52);
-  --accent-foreground: oklch(0.18 0.01 60);
-  --destructive: oklch(0.48 0.16 28);
-  --destructive-foreground: oklch(0.94 0.008 75);
-  --border: oklch(0.28 0.012 60);
-  --input: oklch(0.28 0.012 60);
-  --ring: oklch(0.55 0.1 155);
-  --chart-1: oklch(0.55 0.1 155);
-  --chart-2: oklch(0.62 0.12 52);
-  --chart-3: oklch(0.58 0.08 48);
-  --chart-4: oklch(0.5 0.1 160);
-  --chart-5: oklch(0.6 0.11 50);
-  --sidebar: oklch(0.16 0.01 58);
-  --sidebar-foreground: oklch(0.94 0.008 75);
-  --sidebar-primary: oklch(0.55 0.1 155);
-  --sidebar-primary-foreground: oklch(0.94 0.008 75);
-  --sidebar-accent: oklch(0.26 0.012 60);
-  --sidebar-accent-foreground: oklch(0.94 0.008 75);
-  --sidebar-border: oklch(0.26 0.012 60);
-  --sidebar-ring: oklch(0.5 0.1 155);
-  --bear-bg: oklch(0.2 0.02 230);
-  --bear-card-bg: oklch(0.24 0.015 230);
+  --glow-blue: #3B82F6;
+  --glow-cyan: #06B6D4;
+  --glow-violet: #8B5CF6;
+
+  --terminal-bg: #05070A;
+  --surface-elevated: #161A22;
+  --surface-glass: rgba(255, 255, 255, 0.03);
+  --border-glass: rgba(255, 255, 255, 0.08);
+
+  --radius: 0.5rem;
+
+  --sidebar: #0A0D12;
+  --sidebar-foreground: #E0E6ED;
+  --sidebar-primary: #3B82F6;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #161A22;
+  --sidebar-accent-foreground: #E0E6ED;
+  --sidebar-border: #1E2330;
+  --sidebar-ring: #3B82F6;
 }
 
 @theme inline {
-  --font-sans: "Geist", "Geist Fallback";
-  --font-mono: "Geist Mono", "Geist Mono Fallback";
+  --font-sans: "Geist", "Geist Fallback", system-ui, sans-serif;
+  --font-mono: "Geist Mono", "Geist Mono Fallback", ui-monospace, monospace;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -113,11 +67,6 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -130,8 +79,6 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
-  --color-bear-bg: var(--bear-bg);
-  --color-bear-card-bg: var(--bear-card-bg);
 }
 
 @layer base {
@@ -140,5 +87,48 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@keyframes gradient-shift {
+  0%, 100% { transform: translate(0%, 0%) rotate(0deg); }
+  25% { transform: translate(5%, -5%) rotate(1deg); }
+  50% { transform: translate(-3%, 3%) rotate(-1deg); }
+  75% { transform: translate(3%, 5%) rotate(0.5deg); }
+}
+
+@keyframes glow-pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.8; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+
+.animate-gradient-shift {
+  animation: gradient-shift 20s ease-in-out infinite;
+}
+
+.animate-glow-pulse {
+  animation: glow-pulse 4s ease-in-out infinite;
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-gradient-shift,
+  .animate-glow-pulse,
+  .animate-float {
+    animation: none;
+  }
+  html {
+    scroll-behavior: auto;
   }
 }
