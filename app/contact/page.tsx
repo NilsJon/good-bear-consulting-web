@@ -1,106 +1,136 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import Image from "next/image"
+import Link from "next/link";
+import Image from "next/image";
+import { motion } from "motion/react";
+import { ArrowLeft, Mail } from "lucide-react";
+import { GradientOrbs } from "@/components/effects/gradient-orbs";
+import { Footer } from "@/components/layout/footer";
 
 export default function Contact() {
   return (
-    <div className="min-h-screen bg-background">
-      {/* Navigation */}
-      <nav className="border-b border-border">
-        <div className="max-w-7xl mx-auto px-6 lg:px-12 py-6 flex items-center justify-between">
-          <Link href="/" className="text-xl tracking-tight font-medium">
-            Good Bear Consulting
+    <div className="min-h-screen relative">
+      <GradientOrbs />
+
+      <nav className="fixed top-0 left-0 right-0 z-40 bg-[#0A0D12]/80 backdrop-blur-xl border-b border-white/[0.06]">
+        <div className="max-w-7xl mx-auto px-6 lg:px-12 py-4 flex items-center justify-between">
+          <Link
+            href="/"
+            className="text-lg font-medium tracking-tight text-foreground"
+          >
+            Good Bear
           </Link>
           <div className="flex items-center gap-8">
-            <Link href="/the-bear" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+            <Link
+              href="/the-bear"
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
               The Bear
             </Link>
-            <span className="text-sm px-5 py-2 bg-primary text-primary-foreground rounded-sm">Contact</span>
+            <span className="text-sm px-5 py-2 bg-primary/10 text-primary border border-primary/20 rounded-lg">
+              Contact
+            </span>
           </div>
         </div>
       </nav>
 
-      {/* Content */}
-      <section className="max-w-3xl mx-auto px-6 lg:px-12 pt-32 pb-32">
-        <h1 className="text-5xl lg:text-6xl font-light tracking-tight text-foreground leading-tight text-balance mb-16">
-          Start a Conversation
-        </h1>
+      <main className="relative" style={{ zIndex: 1 }}>
+        <section className="pt-32 pb-16 lg:pt-40 lg:pb-20">
+          <div className="max-w-3xl mx-auto px-6 lg:px-12">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+            >
+              <Link
+                href="/"
+                className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-12"
+              >
+                <ArrowLeft size={14} />
+                Back
+              </Link>
+              <h1 className="text-4xl lg:text-6xl font-light tracking-tight leading-tight mb-6">
+                Start a Conversation
+              </h1>
+              <p className="text-xl text-muted-foreground font-light leading-relaxed">
+                Every engagement begins with alignment. Tell us about your
+                challenges, and we&apos;ll tell you honestly whether we can
+                help.
+              </p>
+            </motion.div>
+          </div>
+        </section>
 
-        <div className="space-y-12">
-          <p className="text-xl text-muted-foreground leading-relaxed">
-            We engage with organizations facing complex technical and strategic challenges—those who recognize that
-            sustainable transformation requires both depth and patience.
-          </p>
-
-          <div className="border border-border bg-card rounded-sm p-8 mt-16">
-            <div className="flex flex-col md:flex-row gap-8 items-start">
-              <div className="flex-shrink-0">
-                <div className="relative w-32 h-42 rounded-sm overflow-hidden bg-muted">
-                  <Image
-                    src="/ceo.JPG"
-                    alt="Nils Stridbeck, CEO"
-                    width={128}
-                    height={180}
-                    className="object-cover"
-                  />
-                </div>
-              </div>
-              <div className="flex-1 space-y-6">
-                <div>
-                  <h2 className="text-2xl font-light tracking-tight text-foreground mb-2">Nils Stridbeck</h2>
-                  <p className="text-sm uppercase tracking-wider text-accent mb-4">Chief Executive Officer</p>
-                  <p className="text-muted-foreground leading-relaxed">
-                    A visionary leader with almost one decade navigating the intersection of technology and organizational
-                    transformation. Nils brings a unique approach to strategic consulting—one rooted in
-                    patience, systems thinking, and sustainable value creation.
-                  </p>
-                </div>
-                <div className="space-y-3 pt-4 border-t border-border">
-                  <div className="flex items-start gap-3">
-                    <span className="text-sm text-muted-foreground min-w-[60px]">Email</span>
-                    <a
-                      href="mailto:nils@goodbear.consulting"
-                      className="text-sm text-foreground hover:text-primary transition-colors"
-                    >
-                      nils@goodbearconsulting.se
-                    </a>
+        <section className="py-12">
+          <div className="max-w-3xl mx-auto px-6 lg:px-12">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="p-8 lg:p-10 rounded-xl bg-white/[0.02] border border-white/[0.06]"
+            >
+              <div className="flex flex-col md:flex-row gap-8 items-start">
+                <div className="flex-shrink-0">
+                  <div className="relative w-28 h-36 rounded-lg overflow-hidden bg-muted">
+                    <Image
+                      src="/ceo.JPG"
+                      alt="Nils Stridbeck"
+                      width={112}
+                      height={144}
+                      className="object-cover"
+                    />
                   </div>
                 </div>
+                <div className="flex-1">
+                  <h2 className="text-2xl font-light tracking-tight text-foreground mb-1">
+                    Nils Stridbeck
+                  </h2>
+                  <p className="text-sm text-primary mb-4">Founder & CEO</p>
+                  <p className="text-muted-foreground leading-relaxed mb-6">
+                    Our visionary CEO with nearly a decade at the intersection of
+                    engineering, product, and organizational transformation.
+                    Nils leads with systems thinking, strategic patience, and
+                    an instinct for finding honey where others see only forest.
+                  </p>
+                  <a
+                    href="mailto:nils@goodbearconsulting.se"
+                    className="inline-flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors"
+                  >
+                    <Mail size={14} />
+                    nils@goodbearconsulting.se
+                  </a>
+                </div>
               </div>
-            </div>
+            </motion.div>
           </div>
+        </section>
 
-          <div className="space-y-6 border-t border-border pt-12">
-            <p className="text-sm uppercase tracking-wider text-muted-foreground">General Inquiries</p>
-            <a
-              href="mailto:hello@goodbear.consulting"
-              className="text-2xl font-light text-foreground hover:text-primary transition-colors inline-block"
+        <section className="py-12">
+          <div className="max-w-3xl mx-auto px-6 lg:px-12">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="text-center p-12 lg:p-16 rounded-xl bg-white/[0.02] border border-white/[0.06]"
             >
-              nils@goodbearconsulting.se
-            </a>
+              <h3 className="text-lg text-foreground mb-6">Get in Touch</h3>
+              <a
+                href="mailto:nils@goodbearconsulting.se"
+                className="inline-flex items-center gap-3 text-2xl lg:text-3xl font-light text-foreground hover:text-primary transition-colors"
+              >
+                nils@goodbearconsulting.se
+              </a>
+              <p className="text-sm text-muted-foreground mt-6">
+                We typically respond within 24 hours.
+              </p>
+            </motion.div>
           </div>
+        </section>
+      </main>
 
-          <div className="space-y-6 border-t border-border pt-12">
-            <p className="text-lg text-muted-foreground leading-relaxed italic">Engagements begin with alignment.</p>
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="max-w-7xl mx-auto px-6 lg:px-12 py-12 mt-24 border-t border-border">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-          <p className="text-sm text-muted-foreground">© {new Date().getFullYear()} Good Bear Consulting</p>
-          <div className="flex gap-8">
-            <Link href="/the-bear" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-              The Bear
-            </Link>
-            <Link href="/contact" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-              Contact
-            </Link>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
-  )
+  );
 }
