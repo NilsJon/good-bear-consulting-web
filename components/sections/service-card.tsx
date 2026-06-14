@@ -20,13 +20,21 @@ interface ServiceCardProps {
 
 export function ServiceCard({ title, description, icon, index }: ServiceCardProps) {
   const Icon = ICON_MAP[icon] || Brain;
+  const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
+
+  const Wrapper = isMobile ? "div" : motion.div;
+  const motionProps = isMobile
+    ? {}
+    : {
+        initial: { opacity: 0, y: 30 },
+        whileInView: { opacity: 1, y: 0 },
+        viewport: { once: true, margin: "-50px" },
+        transition: { duration: 0.5, delay: index * 0.1 },
+      };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 0.5, delay: index * 0.1 }}
+    <Wrapper
+      {...motionProps}
       className="group relative p-6 lg:p-8 rounded-xl bg-white/[0.02] border border-white/[0.06] hover:border-white/[0.12] transition-all duration-300 hover:bg-white/[0.04] hover:shadow-[0_0_40px_rgba(59,130,246,0.06)]"
     >
       <div className="mb-5">
@@ -38,6 +46,6 @@ export function ServiceCard({ title, description, icon, index }: ServiceCardProp
       <p className="text-sm text-muted-foreground leading-relaxed">
         {description}
       </p>
-    </motion.div>
+    </Wrapper>
   );
 }
