@@ -1,7 +1,7 @@
 import type React from "react";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { Analytics } from "@vercel/analytics/next";
+
 import "./globals.css";
 
 const geistSans = Geist({
@@ -20,11 +20,11 @@ export const metadata: Metadata = {
     "Good Bear Consulting helps companies turn ambitious ideas into real products, systems, and capabilities through software engineering and technical expertise.",
   icons: {
     icon: [
-      { url: "/logo.png", media: "(prefers-color-scheme: light)" },
-      { url: "/logo.png", media: "(prefers-color-scheme: dark)" },
+      { url: "/logo-sm.png", media: "(prefers-color-scheme: light)" },
+      { url: "/logo-sm.png", media: "(prefers-color-scheme: dark)" },
       { url: "/logo.svg", type: "image/svg+xml" },
     ],
-    apple: "/logo.png",
+    apple: "/logo-sm.png",
   },
 };
 
@@ -35,11 +35,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
+      <head />
       <body
         className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased bg-background text-foreground`}
       >
         {children}
-        <Analytics />
       </body>
     </html>
   );

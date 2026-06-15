@@ -15,6 +15,7 @@ export default function Contact() {
       <nav className="fixed top-0 left-0 right-0 z-40 bg-[#0A0D12]/80 backdrop-blur-xl border-b border-white/[0.06]">
         <div className="max-w-7xl mx-auto px-6 lg:px-12 py-4 flex items-center justify-between">
           <Link
+            prefetch={false}
             href="/"
             className="text-lg font-medium tracking-tight text-foreground"
           >
@@ -22,6 +23,7 @@ export default function Contact() {
           </Link>
           <div className="flex items-center gap-8">
             <Link
+              prefetch={false}
               href="/the-bear"
               className="text-sm text-muted-foreground hover:text-foreground transition-colors"
             >
@@ -43,6 +45,7 @@ export default function Contact() {
               transition={{ duration: 0.6 }}
             >
               <Link
+                prefetch={false}
                 href="/"
                 className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-12"
               >

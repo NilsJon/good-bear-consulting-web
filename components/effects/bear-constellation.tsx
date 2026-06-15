@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
+import bearData from "@/lib/bear-particles.json";
 
 // ── helpers ──
 
@@ -113,213 +114,27 @@ export function BearConstellation({ className = "" }: { className?: string }) {
       return [(cx - r.x) / r.bw, (cy - r.y) / r.bh];
     }
 
-    // Sobel edge detection on luminance map
-    function computeEdges(lum: Float32Array, w: number, h: number): Float32Array {
-      const edges = new Float32Array(w * h);
-      for (let y = 1; y < h - 1; y++) {
-        for (let x = 1; x < w - 1; x++) {
-          const tl = lum[(y - 1) * w + (x - 1)];
-          const t  = lum[(y - 1) * w + x];
-          const tr = lum[(y - 1) * w + (x + 1)];
-          const l  = lum[y * w + (x - 1)];
-          const r  = lum[y * w + (x + 1)];
-          const bl = lum[(y + 1) * w + (x - 1)];
-          const b  = lum[(y + 1) * w + x];
-          const br = lum[(y + 1) * w + (x + 1)];
-          const gx = -tl - 2 * l - bl + tr + 2 * r + br;
-          const gy = -tl - 2 * t - tr + bl + 2 * b + br;
-          edges[y * w + x] = Math.min(Math.sqrt(gx * gx + gy * gy), 1);
-        }
-      }
-      return edges;
-    }
-
-    // ── importance map: feature regions that define "bear" recognition ──
-    // Each region: center (x, y in 0-1 image space), radius, weight
-    const IMPORTANCE_REGIONS = [
-      // Focal points (5.0)
-      { cx: 0.38, cy: 0.42, r: 0.025, w: 5.0 },  // eye center
-      { cx: 0.25, cy: 0.55, r: 0.03, w: 5.0 },   // nostril
-      // Facial features (2.0–3.0)
-      { cx: 0.36, cy: 0.40, r: 0.05, w: 2.5 },   // eye socket
-      { cx: 0.30, cy: 0.50, r: 0.04, w: 3.0 },   // nose bridge
-      { cx: 0.27, cy: 0.58, r: 0.03, w: 2.5 },   // upper lip
-      { cx: 0.30, cy: 0.61, r: 0.05, w: 3.0 },   // mouth line
-      { cx: 0.36, cy: 0.67, r: 0.04, w: 2.0 },   // chin
-      { cx: 0.42, cy: 0.70, r: 0.06, w: 2.0 },   // jawline
-      { cx: 0.50, cy: 0.72, r: 0.06, w: 1.8 },   // jawline mid
-      { cx: 0.58, cy: 0.72, r: 0.06, w: 1.5 },   // jawline back
-      { cx: 0.55, cy: 0.76, r: 0.07, w: 1.2 },   // neck
-      { cx: 0.38, cy: 0.18, r: 0.05, w: 2.0 },   // ear
-      { cx: 0.45, cy: 0.12, r: 0.05, w: 2.0 },   // ear
-      { cx: 0.35, cy: 0.36, r: 0.04, w: 2.5 },   // brow ridge
-      { cx: 0.32, cy: 0.30, r: 0.04, w: 1.5 },   // forehead
-    ];
-
-    function computeImportance(nx: number, ny: number): number {
-      let imp = 0;
-      for (const reg of IMPORTANCE_REGIONS) {
-        const dx = nx - reg.cx;
-        const dy = ny - reg.cy;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < reg.r) {
-          // smooth falloff within radius
-          const t = 1 - dist / reg.r;
-          imp += reg.w * t * t;
-        }
-      }
-      return imp;
-    }
-
-    function initFromImage(img: HTMLImageElement) {
-      const { w: canvasW } = sizeRef.current;
-      const isMobile = canvasW < 768;
-
-      const sampleSize = 512;
-      const offscreen = document.createElement("canvas");
-      offscreen.width = sampleSize;
-      offscreen.height = sampleSize;
-      const octx = offscreen.getContext("2d")!;
-      octx.drawImage(img, 0, 0, sampleSize, sampleSize);
-      const imageData = octx.getImageData(0, 0, sampleSize, sampleSize);
-      const pixels = imageData.data;
-
-      // luminance maps
-      const lumRaw = new Float32Array(sampleSize * sampleSize);
-      for (let i = 0; i < sampleSize * sampleSize; i++) {
-        const r = pixels[i * 4];
-        const g = pixels[i * 4 + 1];
-        const b = pixels[i * 4 + 2];
-        lumRaw[i] = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-      }
-      const lumMap = new Float32Array(sampleSize * sampleSize);
-      for (let i = 0; i < sampleSize * sampleSize; i++) {
-        lumMap[i] = Math.pow(lumRaw[i], 0.6);
-      }
-
-      // edge maps (dual pass)
-      const edgeMap = computeEdges(lumMap, sampleSize, sampleSize);
-      const edgeMapFine = computeEdges(lumRaw, sampleSize, sampleSize);
-
-      // importance map (per-pixel, based on feature regions)
-      const impMap = new Float32Array(sampleSize * sampleSize);
-      for (let i = 0; i < sampleSize * sampleSize; i++) {
-        const px = i % sampleSize;
-        const py = Math.floor(i / sampleSize);
-        const nx = px / sampleSize;
-        const ny = py / sampleSize;
-        impMap[i] = computeImportance(nx, ny);
-      }
-
-      // generate particles
-      const targetCount = isMobile ? 3000 : 12000;
-      const targetNetwork = isMobile ? 120 : 350;
-      const particles: Particle[] = [];
-      let networkCount = 0;
-
-      // combined weight: density + importance (importance dominates)
-      const weights = new Float32Array(sampleSize * sampleSize);
-      let totalWeight = 0;
-      for (let i = 0; i < sampleSize * sampleSize; i++) {
-        const lum = lumMap[i];
-        const edge = edgeMap[i];
-        const edgeFine = edgeMapFine[i];
-        const imp = impMap[i];
-        const densityW = lum * 0.8 + edge * 4.0 + edgeFine * 3.0 + (lum > 0.04 ? 0.04 : 0);
-        const importanceW = imp;
-        const w = densityW * 1.0 + importanceW * 2.5;
-        weights[i] = w;
-        totalWeight += w;
-      }
-
-      // CDF
-      const cdf = new Float32Array(sampleSize * sampleSize);
-      let cumulative = 0;
-      for (let i = 0; i < sampleSize * sampleSize; i++) {
-        cumulative += weights[i] / totalWeight;
-        cdf[i] = cumulative;
-      }
-
-      // sample particles via inverse CDF
-      for (let p = 0; p < targetCount; p++) {
-        const r = Math.random();
-        let lo = 0, hi = cdf.length - 1;
-        while (lo < hi) {
-          const mid = (lo + hi) >> 1;
-          if (cdf[mid] < r) lo = mid + 1;
-          else hi = mid;
-        }
-
-        const py = Math.floor(lo / sampleSize);
-        const px = lo % sampleSize;
-        const nx = (px + Math.random() - 0.5) / sampleSize;
-        const ny = (py + Math.random() - 0.5) / sampleSize;
-
-        const lum = lumMap[lo];
-        const edge = edgeMap[lo];
-        const edgeFine = edgeMapFine[lo];
-        const imp = impMap[lo];
-        const isEdge = edge > 0.12 || edgeFine > 0.10;
-        const isImportant = imp > 1.0;
-
-        // network nodes strongly prefer important + edge regions
-        const netChance = isImportant ? 0.14 : (isEdge ? 0.06 : 0.02);
-        const isNet = lum > 0.05 && networkCount < targetNetwork && Math.random() < netChance;
-        if (isNet) networkCount++;
-
-        // importance boosts size and brightness
-        const impBoost = Math.min(imp / 8.0, 0.6);
-
-        const baseSize = isNet
-          ? 1.0 + lum * 2.5 + impBoost * 0.4
-          : isEdge
-            ? 0.3 + lum * 0.7 + impBoost * 0.1
-            : 0.2 + lum * 0.5 + impBoost * 0.05;
-
-        const baseBright = isNet
-          ? 0.25 + lum * 0.6 + impBoost * 0.1
-          : isEdge
-            ? 0.12 + lum * 0.45 + impBoost * 0.06
-            : 0.03 + lum * 0.2 + impBoost * 0.03;
-
-        particles.push({
-          x: nx, y: ny,
-          baseX: nx, baseY: ny,
-          size: baseSize,
-          brightness: baseBright,
-          isEdge: isEdge || isImportant,
-          isNetwork: isNet,
-          luminance: lum,
+    function initFromPrecomputed(
+      rawParticles: number[][],
+      rawConns: number[][]
+    ) {
+      const particles: Particle[] = rawParticles.map((p) => {
+        const [x, y, size, brightness, flags] = p;
+        const isEdge = !!(flags & 1);
+        const isNetwork = !!(flags & 2);
+        return {
+          x, y, baseX: x, baseY: y,
+          size, brightness,
+          isEdge, isNetwork,
+          luminance: brightness,
           driftSpeed: 0.12 + Math.random() * 0.3,
           driftOffset: Math.random() * Math.PI * 2,
-          driftAmp: isNet ? 0.002 : 0.001 + Math.random() * 0.003,
-        });
-      }
-
-      // sort: non-network first (back), network on top
-      particles.sort((a, b) => {
-        if (a.isNetwork !== b.isNetwork) return a.isNetwork ? 1 : -1;
-        return a.brightness - b.brightness;
+          driftAmp: isNetwork ? 0.002 : 0.001 + Math.random() * 0.003,
+        };
       });
 
-      // network connections
-      const netIndices = particles
-        .map((p, i) => (p.isNetwork ? i : -1))
-        .filter((i) => i >= 0);
-      const conns: [number, number][] = [];
-      for (let a = 0; a < netIndices.length; a++) {
-        for (let b = a + 1; b < netIndices.length; b++) {
-          const pa = particles[netIndices[a]];
-          const pb = particles[netIndices[b]];
-          const dx = pa.baseX - pb.baseX;
-          const dy = pa.baseY - pb.baseY;
-          if (Math.sqrt(dx * dx + dy * dy) < NET_CONN_DIST) {
-            conns.push([netIndices[a], netIndices[b]]);
-          }
-        }
-      }
+      const conns = rawConns as [number, number][];
 
-      // flow dots
       const shuffled = [...conns].sort(() => Math.random() - 0.5);
       const flows: FlowDot[] = shuffled.slice(0, Math.min(25, conns.length)).map((c) => ({
         fromIdx: c[0], toIdx: c[1],
@@ -328,7 +143,6 @@ export function BearConstellation({ className = "" }: { className?: string }) {
         brightness: 0.3 + Math.random() * 0.35,
       }));
 
-      // curve flows
       const curveFlows: CurveFlow[] = [];
       for (let i = 0; i < FLOW_CURVES.length; i++) {
         for (let j = 0; j < 3; j++) {
@@ -337,14 +151,9 @@ export function BearConstellation({ className = "" }: { className?: string }) {
       }
 
       dataRef.current = {
-        particles,
-        conns,
-        flows,
-        curveFlows,
+        particles, conns, flows, curveFlows,
         vels: particles.map(() => ({ vx: 0, vy: 0 })),
       };
-
-      initDone.current = true;
     }
 
     function handleResize() {
@@ -607,22 +416,14 @@ export function BearConstellation({ className = "" }: { className?: string }) {
 
     handleResize();
 
-    // load source image, sample particles from it
-    const img = new Image();
-    img.crossOrigin = "anonymous";
-    img.onload = () => {
-      initFromImage(img);
-      if (reducedMotion) {
-        draw(0);
-        cancelAnimationFrame(animRef.current);
-      } else {
-        animRef.current = requestAnimationFrame(draw);
-      }
-    };
-    img.src = "/bear-silloute.png";
+    // init from inlined pre-computed data (no network request)
+    const isMobile = sizeRef.current.w < 768;
+    const variant = isMobile ? bearData.mobile : bearData.desktop;
+    initFromPrecomputed(variant.particles, variant.connections);
 
-    // start animation loop (will wait for data)
-    if (!reducedMotion) {
+    if (reducedMotion) {
+      draw(0);
+    } else {
       animRef.current = requestAnimationFrame(draw);
     }
 

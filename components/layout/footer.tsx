@@ -17,12 +17,14 @@ export function Footer() {
           </div>
           <div className="flex items-center gap-8">
             <Link
+              prefetch={false}
               href="/the-bear"
               className="text-sm text-muted-foreground hover:text-foreground transition-colors"
             >
               The Bear
             </Link>
             <Link
+              prefetch={false}
               href="/contact"
               className="text-sm text-muted-foreground hover:text-foreground transition-colors"
             >
