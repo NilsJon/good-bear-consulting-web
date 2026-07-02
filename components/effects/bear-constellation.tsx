@@ -184,19 +184,11 @@ export function BearConstellation({ className = "" }: { className?: string }) {
     let bgCacheW = 0, bgCacheH = 0;
     const PI2 = Math.PI * 2;
     const MR2 = MOUSE_RADIUS * MOUSE_RADIUS;
-    let lastFrameTime = 0;
 
     function draw(time: number) {
       const { w, h } = sizeRef.current;
       const data = dataRef.current;
       if (w === 0 || !data) { animRef.current = requestAnimationFrame(draw); return; }
-
-      // Throttle to ~30fps on mobile to free up main thread
-      if (w < 768 && time - lastFrameTime < 30) {
-        animRef.current = requestAnimationFrame(draw);
-        return;
-      }
-      lastFrameTime = time;
 
       ctx.clearRect(0, 0, w, h);
       const { particles, conns, flows, curveFlows, vels } = data;
@@ -292,145 +284,98 @@ export function BearConstellation({ className = "" }: { className?: string }) {
         }
       }
 
-      const isMobile = w < 768;
-
-      if (isMobile) {
-        // Mobile: single-pass rendering — ~1500 iterations instead of ~96,000
-        ctx.lineWidth = 0.5;
+      // network connections — batch into single path per alpha bucket
+      ctx.lineWidth = 0.5;
+      for (let bucket = 1; bucket <= ABUCKETS; bucket++) {
         ctx.beginPath();
+        let any = false;
         for (let ci = 0; ci < conns.length; ci++) {
           const [i, j] = conns[ci];
           const pa = particles[i], pb = particles[j];
-          ctx.moveTo(bx + pa.x * bw, by + pa.y * bh);
-          ctx.lineTo(bx + pb.x * bw, by + pb.y * bh);
+          const dxx = pa.x - pb.x, dyy = pa.y - pb.y;
+          const dd = Math.sqrt(dxx * dxx + dyy * dyy);
+          const alpha = (1 - dd / NET_CONN_DIST) * 0.12;
+          const pulse = reducedMotion ? 1 : 0.7 + 0.3 * Math.sin(t * 0.4 + ci * 0.05);
+          if (ai(alpha * pulse) === bucket) {
+            ctx.moveTo(bx + pa.x * bw, by + pa.y * bh);
+            ctx.lineTo(bx + pb.x * bw, by + pb.y * bh);
+            any = true;
+          }
         }
-        ctx.strokeStyle = cyanA[ai(0.06)];
-        ctx.stroke();
+        if (any) { ctx.strokeStyle = cyanA[bucket]; ctx.stroke(); }
+      }
 
-        // volume particles — one pass per color, no bucketing
+      // flow dots
+      if (!reducedMotion) {
+        for (const f of flows) {
+          const pa = particles[f.fromIdx], pb = particles[f.toIdx];
+          if (!pa || !pb) continue;
+          const fx = pa.x + (pb.x - pa.x) * f.progress;
+          const fy = pa.y + (pb.y - pa.y) * f.progress;
+          ctx.beginPath();
+          ctx.arc(bx + fx * bw, by + fy * bh, 1.5, 0, PI2);
+          ctx.fillStyle = cyanA[ai(Math.sin(f.progress * Math.PI) * f.brightness)];
+          ctx.fill();
+        }
+      }
+
+      // volume particles — batched by color + alpha bucket
+      for (let bucket = 1; bucket <= ABUCKETS; bucket++) {
         ctx.beginPath();
+        let anyCyan = false;
         for (const p of particles) {
           if (p.isNetwork || !p.isEdge || p.brightness < 0.005) continue;
+          if (ai(p.brightness) !== bucket) continue;
           const cx2 = bx + p.x * bw, cy2 = by + p.y * bh;
           ctx.moveTo(cx2 + p.size, cy2);
           ctx.arc(cx2, cy2, p.size, 0, PI2);
+          anyCyan = true;
         }
-        ctx.fillStyle = cyanA[ai(0.18)];
-        ctx.fill();
+        if (anyCyan) { ctx.fillStyle = cyanA[bucket]; ctx.fill(); }
 
         ctx.beginPath();
+        let anyBlue = false;
         for (const p of particles) {
           if (p.isNetwork || p.isEdge || p.brightness < 0.005) continue;
+          if (ai(p.brightness) !== bucket) continue;
           const cx2 = bx + p.x * bw, cy2 = by + p.y * bh;
           ctx.moveTo(cx2 + p.size, cy2);
           ctx.arc(cx2, cy2, p.size, 0, PI2);
+          anyBlue = true;
         }
-        ctx.fillStyle = blueA[ai(0.12)];
+        if (anyBlue) { ctx.fillStyle = blueA[bucket]; ctx.fill(); }
+      }
+
+      // network node glows
+      const prevComp = ctx.globalCompositeOperation;
+      ctx.globalCompositeOperation = "lighter";
+      const sprite = glowRef.current;
+      if (sprite) {
+        for (const p of particles) {
+          if (!p.isNetwork) continue;
+          const cx2 = bx + p.x * bw, cy2 = by + p.y * bh;
+          const scale = p.size * (p.brightness > 0.45 ? 5 : 3.5);
+          ctx.globalAlpha = p.brightness * 0.7;
+          ctx.drawImage(sprite, cx2 - scale * 4, cy2 - scale * 4, scale * 8, scale * 8);
+        }
+      }
+      ctx.globalCompositeOperation = prevComp;
+      ctx.globalAlpha = 1;
+
+      // network node cores
+      for (const p of particles) {
+        if (!p.isNetwork) continue;
+        const cx2 = bx + p.x * bw, cy2 = by + p.y * bh;
+        const isKey = p.brightness > 0.45;
+        ctx.beginPath();
+        ctx.arc(cx2, cy2, p.size, 0, PI2);
+        ctx.fillStyle = isKey ? cyanA[ai(p.brightness)] : blueA[ai(p.brightness)];
         ctx.fill();
-
-        // network node cores (skip glow sprites on mobile)
-        for (const p of particles) {
-          if (!p.isNetwork) continue;
-          const cx2 = bx + p.x * bw, cy2 = by + p.y * bh;
+        if (isKey) {
           ctx.beginPath();
-          ctx.arc(cx2, cy2, p.size, 0, PI2);
-          ctx.fillStyle = p.brightness > 0.45 ? cyanA[ai(p.brightness)] : blueA[ai(p.brightness)];
+          ctx.arc(cx2, cy2, p.size * 0.4, 0, PI2);
+          ctx.fillStyle = whiteA[ai(p.brightness * 0.7)];
           ctx.fill();
-        }
-      } else {
-        // Desktop: full alpha-bucketed rendering for smooth gradations
-        ctx.lineWidth = 0.5;
-        for (let bucket = 1; bucket <= ABUCKETS; bucket++) {
-          ctx.beginPath();
-          let any = false;
-          for (let ci = 0; ci < conns.length; ci++) {
-            const [i, j] = conns[ci];
-            const pa = particles[i], pb = particles[j];
-            const dxx = pa.x - pb.x, dyy = pa.y - pb.y;
-            const dd = Math.sqrt(dxx * dxx + dyy * dyy);
-            const alpha = (1 - dd / NET_CONN_DIST) * 0.12;
-            const pulse = reducedMotion ? 1 : 0.7 + 0.3 * Math.sin(t * 0.4 + ci * 0.05);
-            if (ai(alpha * pulse) === bucket) {
-              ctx.moveTo(bx + pa.x * bw, by + pa.y * bh);
-              ctx.lineTo(bx + pb.x * bw, by + pb.y * bh);
-              any = true;
-            }
-          }
-          if (any) { ctx.strokeStyle = cyanA[bucket]; ctx.stroke(); }
-        }
-
-        // flow dots
-        if (!reducedMotion) {
-          for (const f of flows) {
-            const pa = particles[f.fromIdx], pb = particles[f.toIdx];
-            if (!pa || !pb) continue;
-            const fx = pa.x + (pb.x - pa.x) * f.progress;
-            const fy = pa.y + (pb.y - pa.y) * f.progress;
-            ctx.beginPath();
-            ctx.arc(bx + fx * bw, by + fy * bh, 1.5, 0, PI2);
-            ctx.fillStyle = cyanA[ai(Math.sin(f.progress * Math.PI) * f.brightness)];
-            ctx.fill();
-          }
-        }
-
-        // volume particles — batched by color + alpha bucket
-        for (let bucket = 1; bucket <= ABUCKETS; bucket++) {
-          ctx.beginPath();
-          let anyCyan = false;
-          for (const p of particles) {
-            if (p.isNetwork || !p.isEdge || p.brightness < 0.005) continue;
-            if (ai(p.brightness) !== bucket) continue;
-            const cx2 = bx + p.x * bw, cy2 = by + p.y * bh;
-            ctx.moveTo(cx2 + p.size, cy2);
-            ctx.arc(cx2, cy2, p.size, 0, PI2);
-            anyCyan = true;
-          }
-          if (anyCyan) { ctx.fillStyle = cyanA[bucket]; ctx.fill(); }
-
-          ctx.beginPath();
-          let anyBlue = false;
-          for (const p of particles) {
-            if (p.isNetwork || p.isEdge || p.brightness < 0.005) continue;
-            if (ai(p.brightness) !== bucket) continue;
-            const cx2 = bx + p.x * bw, cy2 = by + p.y * bh;
-            ctx.moveTo(cx2 + p.size, cy2);
-            ctx.arc(cx2, cy2, p.size, 0, PI2);
-            anyBlue = true;
-          }
-          if (anyBlue) { ctx.fillStyle = blueA[bucket]; ctx.fill(); }
-        }
-
-        // network node glows
-        const prevComp = ctx.globalCompositeOperation;
-        ctx.globalCompositeOperation = "lighter";
-        const sprite = glowRef.current;
-        if (sprite) {
-          for (const p of particles) {
-            if (!p.isNetwork) continue;
-            const cx2 = bx + p.x * bw, cy2 = by + p.y * bh;
-            const scale = p.size * (p.brightness > 0.45 ? 5 : 3.5);
-            ctx.globalAlpha = p.brightness * 0.7;
-            ctx.drawImage(sprite, cx2 - scale * 4, cy2 - scale * 4, scale * 8, scale * 8);
-          }
-        }
-        ctx.globalCompositeOperation = prevComp;
-        ctx.globalAlpha = 1;
-
-        // network node cores
-        for (const p of particles) {
-          if (!p.isNetwork) continue;
-          const cx2 = bx + p.x * bw, cy2 = by + p.y * bh;
-          const isKey = p.brightness > 0.45;
-          ctx.beginPath();
-          ctx.arc(cx2, cy2, p.size, 0, PI2);
-          ctx.fillStyle = isKey ? cyanA[ai(p.brightness)] : blueA[ai(p.brightness)];
-          ctx.fill();
-          if (isKey) {
-            ctx.beginPath();
-            ctx.arc(cx2, cy2, p.size * 0.4, 0, PI2);
-            ctx.fillStyle = whiteA[ai(p.brightness * 0.7)];
-            ctx.fill();
-          }
         }
       }
 
