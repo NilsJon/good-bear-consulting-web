@@ -63,7 +63,6 @@ export function HeroSection({ skipAnimations = false }: { skipAnimations?: boole
             }
           >
             <Link
-              prefetch={false}
               href="/contact"
               className="pointer-events-auto group inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:bg-primary/90 transition-all hover:shadow-[0_0_30px_rgba(59,130,246,0.3)]"
             >
