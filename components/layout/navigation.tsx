@@ -21,7 +21,10 @@ export function Navigation() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50);
+    const handleScroll = () => {
+      const threshold = window.innerWidth < 768 ? window.innerHeight * 0.5 : 50;
+      setScrolled(window.scrollY > threshold);
+    };
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -55,7 +58,7 @@ export function Navigation() {
           href="/"
           className="text-lg font-medium tracking-tight text-foreground"
         >
-          Good Bear
+          Good Bear Consulting
         </Link>
 
         <div className="hidden md:flex items-center gap-8">

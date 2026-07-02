@@ -100,7 +100,16 @@ export function BearConstellation({ className = "" }: { className?: string }) {
 
     function bearRegion() {
       const { w, h } = sizeRef.current;
-      if (w < 768) return { x: w * 0.10, y: h * 0.08, bw: w * 0.80, bh: h * 0.75 };
+      if (w < 768) {
+        const desktopAR = 1.2;
+        let bw = w;
+        let bh = bw / desktopAR;
+        if (bh > h * 0.95) {
+          bh = h * 0.95;
+          bw = bh * desktopAR;
+        }
+        return { x: (w - bw) / 2, y: (h - bh) / 2, bw, bh };
+      }
       return { x: w * 0.30, y: h * 0.03, bw: w * 0.60, bh: h * 0.88 };
     }
 
