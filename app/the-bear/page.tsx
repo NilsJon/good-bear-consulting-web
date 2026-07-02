@@ -34,12 +34,14 @@ const PRINCIPLES = [
 export default function TheBear() {
   return (
     <div className="min-h-screen relative">
-      <GradientOrbs />
+      <div className="hidden md:block">
+        <GradientOrbs />
+      </div>
 
       <nav className="fixed top-0 left-0 right-0 z-40 bg-[#0A0D12]/80 backdrop-blur-xl border-b border-white/[0.06]">
         <div className="max-w-7xl mx-auto px-6 lg:px-12 py-4 flex items-center justify-between">
           <Link
-            prefetch={false}
+
             href="/"
             className="text-lg font-medium tracking-tight text-foreground"
           >
@@ -50,7 +52,7 @@ export default function TheBear() {
               The Bear
             </span>
             <Link
-              prefetch={false}
+  
               href="/contact"
               className="text-sm px-5 py-2 bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 transition-colors rounded-lg"
             >
@@ -70,7 +72,7 @@ export default function TheBear() {
               transition={{ duration: 0.6 }}
             >
               <Link
-                prefetch={false}
+    
                 href="/"
                 className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-12"
               >
@@ -234,7 +236,7 @@ export default function TheBear() {
                 </h2>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                   <Link
-                    prefetch={false}
+        
                     href="/contact"
                     className="group inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:bg-primary/90 transition-all hover:shadow-[0_0_30px_rgba(59,130,246,0.3)]"
                   >

@@ -10,12 +10,14 @@ import { Footer } from "@/components/layout/footer";
 export default function Contact() {
   return (
     <div className="min-h-screen relative">
-      <GradientOrbs />
+      <div className="hidden md:block">
+        <GradientOrbs />
+      </div>
 
       <nav className="fixed top-0 left-0 right-0 z-40 bg-[#0A0D12]/80 backdrop-blur-xl border-b border-white/[0.06]">
         <div className="max-w-7xl mx-auto px-6 lg:px-12 py-4 flex items-center justify-between">
           <Link
-            prefetch={false}
+
             href="/"
             className="text-lg font-medium tracking-tight text-foreground"
           >
@@ -23,7 +25,7 @@ export default function Contact() {
           </Link>
           <div className="flex items-center gap-8">
             <Link
-              prefetch={false}
+  
               href="/the-bear"
               className="text-sm text-muted-foreground hover:text-foreground transition-colors"
             >
@@ -45,7 +47,7 @@ export default function Contact() {
               transition={{ duration: 0.6 }}
             >
               <Link
-                prefetch={false}
+    
                 href="/"
                 className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-12"
               >
@@ -81,6 +83,7 @@ export default function Contact() {
                       alt="Nils Stridbeck"
                       width={112}
                       height={144}
+                      sizes="112px"
                       className="object-cover"
                     />
                   </div>
@@ -116,12 +119,12 @@ export default function Contact() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              className="text-center p-12 lg:p-16 rounded-xl bg-white/[0.02] border border-white/[0.06]"
+              className="text-center p-6 sm:p-12 lg:p-16 rounded-xl bg-white/[0.02] border border-white/[0.06]"
             >
               <h3 className="text-lg text-foreground mb-6">Get in Touch</h3>
               <a
                 href="mailto:nils@goodbearconsulting.se"
-                className="inline-flex items-center gap-3 text-2xl lg:text-3xl font-light text-foreground hover:text-primary transition-colors"
+                className="inline-flex items-center gap-3 text-lg sm:text-2xl lg:text-3xl font-light text-foreground hover:text-primary transition-colors break-all sm:break-normal"
               >
                 nils@goodbearconsulting.se
               </a>

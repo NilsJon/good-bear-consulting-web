@@ -9,16 +9,20 @@ export function HeroSection({ skipAnimations = false }: { skipAnimations?: boole
   const words = "Building what's next.".split(" ");
 
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden">
+    <section className="relative md:min-h-screen md:flex md:items-center overflow-hidden">
       <div
-        className={skipAnimations ? "absolute inset-0" : "absolute inset-0 animate-[fadeIn_2s_0.3s_both]"}
+        className={
+          skipAnimations
+            ? "relative h-[55vh] md:absolute md:inset-0 md:h-auto"
+            : "relative h-[55vh] md:absolute md:inset-0 md:h-auto animate-[fadeIn_2s_0.3s_both]"
+        }
       >
         <BearConstellation />
       </div>
 
-      <div className="relative z-10 px-6 lg:px-24 py-20 lg:py-32 w-full pointer-events-none">
+      <div className="relative z-10 px-6 lg:px-24 -mt-12 pb-12 md:mt-0 md:py-20 lg:py-32 w-full pointer-events-none">
         <div className="max-w-xl lg:max-w-2xl">
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-light tracking-tight leading-[1.1] mb-8">
+          <h1 className="text-3xl sm:text-5xl lg:text-6xl xl:text-7xl font-light tracking-tight leading-[1.1] mb-6 md:mb-8">
             {skipAnimations
               ? words.join(" ")
               : words.map((word, i) => (
@@ -38,7 +42,7 @@ export function HeroSection({ skipAnimations = false }: { skipAnimations?: boole
                 ))}
           </h1>
           {skipAnimations ? (
-            <p className="text-lg lg:text-xl text-muted-foreground font-light leading-relaxed max-w-lg mb-12">
+            <p className="text-base lg:text-xl text-muted-foreground font-light leading-relaxed max-w-lg mb-10 md:mb-12">
               Good Bear Consulting helps companies turn ambitious ideas into real
               products, systems, and capabilities through software engineering,
               AI, and technical expertise.
@@ -48,7 +52,7 @@ export function HeroSection({ skipAnimations = false }: { skipAnimations?: boole
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 1.0 }}
-              className="text-lg lg:text-xl text-muted-foreground font-light leading-relaxed max-w-lg mb-12"
+              className="text-base lg:text-xl text-muted-foreground font-light leading-relaxed max-w-lg mb-10 md:mb-12"
             >
               Good Bear Consulting helps companies turn ambitious ideas into real
               products, systems, and capabilities through software engineering,
@@ -63,7 +67,6 @@ export function HeroSection({ skipAnimations = false }: { skipAnimations?: boole
             }
           >
             <Link
-              prefetch={false}
               href="/contact"
               className="pointer-events-auto group inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:bg-primary/90 transition-all hover:shadow-[0_0_30px_rgba(59,130,246,0.3)]"
             >

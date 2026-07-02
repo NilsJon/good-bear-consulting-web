@@ -21,7 +21,10 @@ export function Navigation() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50);
+    const handleScroll = () => {
+      const threshold = window.innerWidth < 768 ? window.innerHeight * 0.5 : 50;
+      setScrolled(window.scrollY > threshold);
+    };
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -51,11 +54,11 @@ export function Navigation() {
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-12 py-4 flex items-center justify-between">
         <Link
-          prefetch={false}
+
           href="/"
           className="text-lg font-medium tracking-tight text-foreground"
         >
-          Good Bear
+          Good Bear Consulting
         </Link>
 
         <div className="hidden md:flex items-center gap-8">
@@ -71,7 +74,7 @@ export function Navigation() {
           ))}
           {NAV_PAGES.map((item) => (
             <Link
-              prefetch={false}
+    
               key={item.href}
               href={item.href}
               className="text-sm text-muted-foreground hover:text-foreground transition-colors"
@@ -80,7 +83,7 @@ export function Navigation() {
             </Link>
           ))}
           <Link
-            prefetch={false}
+  
             href="/contact"
             className="text-sm px-5 py-2 bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 transition-colors rounded-lg"
           >
@@ -118,7 +121,7 @@ export function Navigation() {
               ))}
               {NAV_PAGES.map((item) => (
                 <Link
-                  prefetch={false}
+        
                   key={item.href}
                   href={item.href}
                   className="block text-sm text-muted-foreground hover:text-foreground transition-colors"
@@ -128,7 +131,7 @@ export function Navigation() {
                 </Link>
               ))}
               <Link
-                prefetch={false}
+      
                 href="/contact"
                 className="block text-sm px-5 py-2 bg-primary/10 text-primary border border-primary/20 rounded-lg text-center"
                 onClick={() => setMobileOpen(false)}
