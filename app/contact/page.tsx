@@ -10,7 +10,9 @@ import { Footer } from "@/components/layout/footer";
 export default function Contact() {
   return (
     <div className="min-h-screen relative">
-      <GradientOrbs />
+      <div className="hidden md:block">
+        <GradientOrbs />
+      </div>
 
       <nav className="fixed top-0 left-0 right-0 z-40 bg-[#0A0D12]/80 backdrop-blur-xl border-b border-white/[0.06]">
         <div className="max-w-7xl mx-auto px-6 lg:px-12 py-4 flex items-center justify-between">
