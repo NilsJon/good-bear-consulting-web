@@ -160,7 +160,7 @@ export function TerminalEntry({ onEnter }: TerminalEntryProps) {
       transition={{ duration: 0.6 }}
     >
       <div className="w-full max-w-2xl px-6">
-        <div className="font-mono text-sm space-y-3">
+        <div className="font-mono text-base md:text-lg space-y-3">
           {lines.map((line, i) => (
             <div key={i} className="flex flex-col">
               {line.type === "prompt" ? (
@@ -238,7 +238,7 @@ export function TerminalEntry({ onEnter }: TerminalEntryProps) {
           animate={{ opacity: 1 }}
           transition={{ delay: 1 }}
           onClick={handleEnter}
-          className="fixed top-6 right-6 text-xs text-muted-foreground/40 hover:text-muted-foreground transition-colors cursor-pointer"
+          className="fixed top-6 right-6 text-base text-muted-foreground/60 hover:text-muted-foreground transition-colors cursor-pointer"
         >
           skip
         </motion.button>

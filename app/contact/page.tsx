@@ -21,7 +21,7 @@ export default function Contact() {
             href="/"
             className="text-lg font-medium tracking-tight text-foreground"
           >
-            Good Bear
+            Good Bear Consulting
           </Link>
           <div className="flex items-center gap-8">
             <Link
